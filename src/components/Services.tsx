@@ -1,29 +1,59 @@
+import { useEffect, useState } from "react";
 import { Button } from "./ui/Button";
 import { Blocks, Zap, Share2 } from 'lucide-react';
+import { getServices, Service } from "../services/airtable";
 
-const services = [
-    {
-        icon: <Blocks className="w-8 h-8 text-orange-500" />,
-        title: "Automatisation Make.com",
-        description: "Créez des workflows puissants qui connectent vos outils et automatisent vos processus métier sans une ligne de code.",
-        features: ["Intégrations 1000+ apps", "Workflows complexes", "Triggers intelligents"],
-    },
-    {
-        icon: <Zap className="w-8 h-8 text-purple-500" />,
-        title: "Développement N8N",
-        description: "Solutions d'automatisation sur mesure avec N8N pour des besoins spécifiques et des flux de données avancés.",
-        features: ["Self-hosted", "Logique personnalisée", "API REST/GraphQL"],
-        highlighted: true,
-    },
-    {
-        icon: <Share2 className="w-8 h-8 text-green-500" />,
-        title: "Connexions API",
-        description: "Intégrez vos systèmes existants grâce à des connexions API robustes et des synchronisations en temps réel.",
-        features: ["APIs REST/SOAP", "Webhook management", "Data mapping"],
-    },
-];
+const ICONS: { [key: string]: React.ReactElement } = {
+    Blocks: <Blocks className="w-8 h-8 text-orange-500" />,
+    Zap: <Zap className="w-8 h-8 text-purple-500" />,
+    Share2: <Share2 className="w-8 h-8 text-green-500" />,
+};
 
 const Services = () => {
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const fetchedServices = await getServices();
+                setServices(fetchedServices);
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError("Impossible de charger les services.");
+                }
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchServices();
+    }, []);
+
+    if (loading) {
+        return (
+            <section className="py-20 bg-gray-50">
+                <div className="container mx-auto text-center">
+                    <p>Chargement des services...</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="py-20 bg-gray-50">
+                <div className="container mx-auto text-center">
+                    <p className="text-red-500">Erreur: {error}</p>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-20 bg-gray-50">
             <div className="container mx-auto text-center">
@@ -34,10 +64,10 @@ const Services = () => {
                     Je vous accompagne dans la transformation digitale de votre entreprise avec des solutions NoCode adaptées à vos besoins spécifiques.
                 </p>
                 <div className="grid md:grid-cols-3 gap-8 mt-12 text-left">
-                    {services.map((service, index) => (
-                        <div key={index} className={`p-8 rounded-2xl flex flex-col ${service.highlighted ? 'border-2 border-purple-500 bg-white shadow-xl' : 'bg-white shadow-lg'}`}>
+                    {services.map((service) => (
+                        <div key={service.id} className={`p-8 rounded-2xl flex flex-col ${service.highlighted ? 'border-2 border-purple-500 bg-white shadow-xl' : 'bg-white shadow-lg'}`}>
                             <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${service.highlighted ? 'bg-purple-100' : 'bg-orange-100'}`}>
-                                {service.icon}
+                                {ICONS[service.icon] || <Blocks className="w-8 h-8 text-orange-500" />}
                             </div>
                             <h3 className="text-2xl font-bold mt-6">{service.title}</h3>
                             <p className="mt-2 text-gray-600 flex-grow">{service.description}</p>
