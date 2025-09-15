@@ -1,5 +1,3 @@
-import Airtable from 'airtable';
-
 const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
 const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
 const apiKey = import.meta.env.VITE_AIRTABLE_ACCESS_TOKEN;
@@ -13,6 +11,8 @@ export interface Project {
 }
 
 export const getProjects = async (): Promise<Project[]> => {
+    const { default: Airtable } = await import('airtable');
+
     if (!baseId || !tableName || !apiKey) {
         throw new Error("Les variables d'environnement Airtable ne sont pas configurées.");
     }
