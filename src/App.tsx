@@ -1,22 +1,23 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import Experience from './components/Experience';
-import { Testimonials } from './components/Testimonials';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import Projects from './pages/Projects';
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-grow">
-        <Hero />
-        <Services />
-        <Experience />
-        <Testimonials />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/projets" element={<Projects />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   )
 }
 

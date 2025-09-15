@@ -1,21 +1,21 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
     return (
         <footer className="bg-gray-800 text-white mt-20">
             <div className="container mx-auto py-12 px-4">
                 <div className="grid md:grid-cols-4 gap-8">
                     <div>
-                        <h1 className="text-2xl font-bold">
-                            Mati<span className="font-mono text-gray-400">code</span>
-                        </h1>
-                        <p className="text-gray-400 mt-2">Automatisez votre entreprise sans coder.</p>
+                        <img src="/logo.png" alt="Maticode logo" className="h-8" />
+                        <p className="text-gray-400 mt-4">Automatisez votre entreprise sans coder.</p>
                     </div>
                     <div>
                         <h4 className="font-bold text-lg">Navigation</h4>
                         <ul className="mt-4 space-y-2">
-                            <li><a href="#" className="text-gray-400 hover:text-white">Services</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white">Projets</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white">À propos</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white">Contact</a></li>
+                            <li><a href="/#services" className="text-gray-400 hover:text-white">Services</a></li>
+                            <li><Link to="/projets" className="text-gray-400 hover:text-white">Projets</Link></li>
+                            <li><a href="/#a-propos" className="text-gray-400 hover:text-white">À propos</a></li>
+                            <li><a href="/#contact" className="text-gray-400 hover:text-white">Contact</a></li>
                         </ul>
                     </div>
                     <div>
